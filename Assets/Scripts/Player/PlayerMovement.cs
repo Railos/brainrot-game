@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float airJumpForceMultiplier = 0.7f; // Each air jump will be 70% of the previous jump force
     private float currentSpeed = 0f;
     private float moveDirection;
-    private int jumpsRemaining = 2; // Track available jumps
+    public int jumpsRemaining = 2; // Track available jumps
     private float currentJumpForce;
     
     private Controls controls;
@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
     
     private bool IsGrounded()
     {
-        return Physics2D.OverlapBox(groundCheck.position, new Vector2(0.3f, 0.2f), 0, groundLayer);
+        return Physics2D.OverlapBox(groundCheck.position, new Vector2(0.2f, 0.1f), 0, groundLayer);
     }
 
     private void FlipCharacter()
