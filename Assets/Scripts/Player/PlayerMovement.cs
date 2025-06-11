@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float acceleration = 0.2f; // How quickly we reach max speed
     [SerializeField] private float deceleration = 0.1f; // How quickly we slow down
+    [SerializeField] private float airAcceleration = 0.1f; // Slower acceleration in air
+    [SerializeField] private float airDeceleration = 0.05f; // Slower deceleration in air
     [SerializeField] private float initialSpeed = 2f; // Starting speed when movement begins
     [SerializeField] private float airJumpForceMultiplier = 0.7f; // Each air jump will be 70% of the previous jump force
     private float currentSpeed = 0f;
@@ -47,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         float targetSpeed = moveDirection * moveSpeed;
+        float currentAcceleration = IsGrounded() ? acceleration : airAcceleration;
+        float currentDeceleration = IsGrounded() ? deceleration : airDeceleration;
         
         // Accelerate or decelerate based on input
         if (Mathf.Abs(moveDirection) > 0.1f)
@@ -57,11 +61,11 @@ public class PlayerMovement : MonoBehaviour
                 currentSpeed = Mathf.Sign(moveDirection) * initialSpeed;
             }
             // Then accelerate to full speed
-            currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, acceleration);
+            currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, currentAcceleration);
         }
         else
         {
-            currentSpeed = Mathf.Lerp(currentSpeed, 0f, deceleration);
+            currentSpeed = Mathf.Lerp(currentSpeed, 0f, currentDeceleration);
         }
 
         rb.linearVelocity = new Vector2(
