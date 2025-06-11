@@ -8,10 +8,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxSpeed;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float maxJumpTime;
-    private float curJumpTime = 0f;
-    private bool isJumping = false;
+    [SerializeField] private float acceleration = 0.2f; // How quickly we reach max speed
+    [SerializeField] private float deceleration = 0.1f; // How quickly we slow down
+    [SerializeField] private float initialSpeed = 2f; // Starting speed when movement begins
+    [SerializeField] private float airJumpForceMultiplier = 0.7f; // Each air jump will be 70% of the previous jump force
+    private float currentSpeed = 0f;
     private float moveDirection;
+    private int jumpsRemaining = 2; // Track available jumps
+    private float currentJumpForce;
     
     private Controls controls;
     private InputAction moveAction;
@@ -42,36 +46,43 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.AddForceX(moveDirection * moveSpeed, ForceMode2D.Force);
+        float targetSpeed = moveDirection * moveSpeed;
         
+        // Accelerate or decelerate based on input
+        if (Mathf.Abs(moveDirection) > 0.1f)
+        {
+            // If we're just starting to move, use initial speed
+            if (Mathf.Abs(currentSpeed) < 0.1f)
+            {
+                currentSpeed = Mathf.Sign(moveDirection) * initialSpeed;
+            }
+            // Then accelerate to full speed
+            currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, acceleration);
+        }
+        else
+        {
+            currentSpeed = Mathf.Lerp(currentSpeed, 0f, deceleration);
+        }
+
         rb.linearVelocity = new Vector2(
-            Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed),
+            currentSpeed,
             rb.linearVelocityY
         );
     }
 
     private void Jumping()
     {
-        if (jumpAction.triggered && IsGrounded())
+        if (IsGrounded())
         {
-            rb.AddForceY(jumpForce * Time.deltaTime, ForceMode2D.Impulse);
-            isJumping = true;
-            return;
+            jumpsRemaining = 2;
+            currentJumpForce = jumpForce; // Reset jump force when grounded
         }
 
-        if (jumpAction.inProgress && isJumping)
+        if (jumpAction.triggered && jumpsRemaining > 0)
         {
-            if (curJumpTime < maxJumpTime)
-            {
-                rb.AddForceY(jumpForce * Time.deltaTime, ForceMode2D.Impulse);
-                curJumpTime += Time.deltaTime;
-            }
-        }
-
-        if (jumpAction.WasReleasedThisDynamicUpdate())
-        {
-            isJumping = false;
-            curJumpTime = 0f;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, currentJumpForce);
+            jumpsRemaining--;
+            currentJumpForce *= airJumpForceMultiplier; // Reduce force for next jump
         }
     }
     
