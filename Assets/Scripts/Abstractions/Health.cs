@@ -20,4 +20,10 @@ public class Health : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
+    public void Heal(int value)
+    {
+        health += value;
+        health = Mathf.Round(maxHealth);
+    }
 }
