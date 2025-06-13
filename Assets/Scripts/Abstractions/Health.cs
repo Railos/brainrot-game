@@ -5,6 +5,7 @@ public class Health : MonoBehaviour
 {
 
     [SerializeField] private float maxHealth;
+    public Action actionAfterDeath;
     private float health;
 
     private void Awake()
@@ -17,7 +18,9 @@ public class Health : MonoBehaviour
         health -= damage;
         if (health <= 0f)
         {
-            Destroy(this.gameObject);
+            if (actionAfterDeath != null)
+                actionAfterDeath.Invoke();
+            else DestroyObjectAction();
         }
     }
 
@@ -25,5 +28,10 @@ public class Health : MonoBehaviour
     {
         health += value;
         health = Mathf.Round(maxHealth);
+    }
+
+    public void DestroyObjectAction()
+    {
+        Destroy(this.gameObject);
     }
 }

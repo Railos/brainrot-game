@@ -5,15 +5,16 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float maxSpeed;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float acceleration = 0.2f; // How quickly we reach max speed
-    [SerializeField] private float deceleration = 0.1f; // How quickly we slow down
-    [SerializeField] private float airAcceleration = 0.1f; // Slower acceleration in air
-    [SerializeField] private float airDeceleration = 0.05f; // Slower deceleration in air
-    [SerializeField] private float initialSpeed = 2f; // Starting speed when movement begins
-    [SerializeField] private float airJumpForceMultiplier = 0.7f; // Each air jump will be 70% of the previous jump force
+    public float groundMoveSpeed = 10f;
+    public float groundAcceleration = 15f;
+    public float groundDeceleration = 20f;
+    
+    public float airMoveSpeed = 8f;
+    public float airAcceleration = 12f;
+    public float airDeceleration = 15f;
+    public float airJumpForceMultiplier;
+    
     private float currentSpeed = 0f;
     private float moveDirection;
     public int jumpsRemaining = 2; // Track available jumps
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
     private bool isFacingRight = true;
+    public bool isControllingSpeed = true;
 
     private void Awake()
     {
@@ -48,37 +50,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float targetSpeed = moveDirection * moveSpeed;
-        float currentAcceleration = IsGrounded() ? acceleration : airAcceleration;
-        float currentDeceleration = IsGrounded() ? deceleration : airDeceleration;
-        
-        // Accelerate or decelerate based on input
-        if (Mathf.Abs(moveDirection) > 0.1f)
-        {
-            // If we're just starting to move, use initial speed
-            if (Mathf.Abs(currentSpeed) < 0.1f)
-            {
-                currentSpeed = Mathf.Sign(moveDirection) * initialSpeed;
-            }
-            // Then accelerate to full speed
-            currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, currentAcceleration);
-        }
-        else
-        {
-            currentSpeed = Mathf.Lerp(currentSpeed, 0f, currentDeceleration);
-        }
+        float currentSpeed = IsGrounded() ? groundMoveSpeed : airMoveSpeed;
+        float currentAccel = IsGrounded() ? groundAcceleration : airAcceleration;
+        float currentDecel = IsGrounded() ? groundDeceleration : airDeceleration;
 
-        rb.linearVelocity = new Vector2(
-            currentSpeed,
-            rb.linearVelocityY
-        );
+        // Рассчитываем целевую скорость
+        float targetSpeed = moveDirection * currentSpeed;
+        float speedDifference = targetSpeed - rb.linearVelocity.x;
+
+        // Определяем силу для ускорения/торможения
+        float accelerationRate = (Mathf.Abs(moveDirection) > 0.1f) 
+            ? currentAccel 
+            : currentDecel;
+
+        // Применяем силу
+        float movementForce = speedDifference * accelerationRate;
+        rb.AddForce(new Vector2(movementForce, 0), ForceMode2D.Force);
+
+        // Ограничиваем максимальную скорость
+        float maxSpeed = IsGrounded() ? groundMoveSpeed : airMoveSpeed;
+        if (isControllingSpeed && Mathf.Abs(rb.linearVelocity.x) > maxSpeed)
+        {
+            rb.linearVelocity = new Vector2(Mathf.Sign(rb.linearVelocity.x) * maxSpeed, rb.linearVelocity.y);
+        }
     }
 
     private void Jumping()
     {
         if (IsGrounded())
         {
-            jumpsRemaining = 2;
+            jumpsRemaining = 1;
             currentJumpForce = jumpForce; // Reset jump force when grounded
         }
 
@@ -90,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
         return Physics2D.OverlapBox(groundCheck.position, new Vector2(0.2f, 0.1f), 0, groundLayer);
     }

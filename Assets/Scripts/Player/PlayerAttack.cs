@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
@@ -15,6 +16,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Camera cam;
     private Controls controls;
     private InputAction attackAction;
+    private bool resettedAttack = true;
     private bool canAttack = true;
     private PlayerMovement movement;
 
@@ -28,7 +30,7 @@ public class PlayerAttack : MonoBehaviour
     
     private void Update()
     {
-        if (attackAction.triggered && canAttack && movement.jumpsRemaining == 2)
+        if (attackAction.triggered && resettedAttack && canAttack)
         {
             PerformAttack();
         }
@@ -36,14 +38,17 @@ public class PlayerAttack : MonoBehaviour
 
     private void PerformAttack()
     {
+        resettedAttack = false;
         canAttack = false;
-
+        StartCoroutine(nameof(waitUntilOnTheGround));
+        
+        movement.enabled = false;
+        Invoke(nameof(ResetSpeedControl), 0.1f);
+        
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 attackDirection = (mousePosition - (Vector2)transform.position).normalized;
         float attackAngle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
-        movement.enabled = false;
-        Invoke(nameof(ReturnMovement), 0.3f);
-        GetComponent<Rigidbody2D>().AddForce(attackDirection * attackDash, ForceMode2D.Impulse);
+        GetComponent<Rigidbody2D>().linearVelocity = attackDirection * attackDash;
         
         RaycastHit2D[] hits = Physics2D.BoxCastAll(
             transform.position,
@@ -68,13 +73,19 @@ public class PlayerAttack : MonoBehaviour
         Invoke(nameof(ResetAttack), attackCooldown);
     }
 
-    private void ReturnMovement()
+    private void ResetSpeedControl()
     {
         movement.enabled = true;
     }
-    
+
+    IEnumerator waitUntilOnTheGround()
+    {
+        yield return new WaitUntil(movement.IsGrounded);
+        canAttack = true;
+    }
+
     private void ResetAttack()
     {
-        canAttack = true;
+        resettedAttack = true;
     }
 }
