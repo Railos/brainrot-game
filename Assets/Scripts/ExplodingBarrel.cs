@@ -1,24 +1,22 @@
 using UnityEngine;
 
-public class ExplodingBarrel : MonoBehaviour
+public class ExplodingBarrel : MonoBehaviour, IDamageable
 {
     [SerializeField] private float explosionRadius = 5f;
     [SerializeField] private int explosionDamage = 30;
     [SerializeField] private float explosionForce = 15f;
     [SerializeField] private LayerMask affectedLayers;
-
-    private void Start()
-    {
-        GetComponent<Health>().actionAfterDeath += Explode;
-    }
     
-    public void Explode()
+    public float MaxHealth { get; set; }
+    public float CurrentHealth { get; set; }
+
+    public void Damage(float damageAmount)
     {
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius, affectedLayers);
         foreach (Collider2D hitCollider in hitColliders)
         {
-            Health health = hitCollider.GetComponent<Health>();
-            if (health != null && health != GetComponent<Health>())
+            IDamageable health = hitCollider.GetComponent<IDamageable>();
+            if (health != null && hitCollider.gameObject != this.gameObject)
             {
                 health.Damage(explosionDamage);
             }
@@ -30,6 +28,13 @@ public class ExplodingBarrel : MonoBehaviour
             }
         }
         
+        Die();
+    }
+
+    public void Die()
+    {
         Destroy(this.gameObject);
     }
+
+    
 }

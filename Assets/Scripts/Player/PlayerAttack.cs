@@ -59,15 +59,12 @@ public class PlayerAttack : MonoBehaviour
             attackableLayers
         );
 
-        HashSet<Health> damagedTargets = new HashSet<Health>();
-
         foreach (RaycastHit2D hit in hits)
         {
-            Health health = hit.collider.GetComponent<Health>();
-            if (health != null && !damagedTargets.Contains(health))
+            IDamageable health = hit.collider.GetComponent<IDamageable>();
+            if (health != null)
             {
                 health.Damage(damageAmount);
-                damagedTargets.Add(health);
             }
         }
         Invoke(nameof(ResetAttack), attackCooldown);
