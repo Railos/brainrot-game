@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2d895b1586f20914cb6ee4c80c013971
+guid: 2640ab992532fcf45911f8d2bbb6a09d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2249300203928450402
-    second: tralalero-RUN_0
+      213: 5816639549126483244
+    second: tralalero-RUN-fin.01gif-5_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
-  spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMode: 1
+  spriteExtrude: 32
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 170
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tralalero-RUN_0
+      name: tralalero-RUN-fin.01gif-5_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e9a81afb161e8c0e0800000000000000
-      internalID: -2249300203928450402
+      spriteID: c2d1c202adad8b050800000000000000
+      internalID: 5816639549126483244
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      tralalero-RUN_0: -2249300203928450402
+      tralalero-RUN-fin.01gif-5_0: 5816639549126483244
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
