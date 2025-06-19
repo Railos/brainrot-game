@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     
     public Rigidbody2D rb { get; set; }
     public bool isFacingRight { get; set; } = true;
+    public ParticleSystem bloodParticle;
     
     #region State Machine Variables
     
@@ -54,6 +55,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     public void Damage(float damageAmount)
     {
         CurrentHealth -= damageAmount;
+        Instantiate(bloodParticle, transform.position, Quaternion.identity);
         
         if (CurrentHealth <= 0f) Die();
     }

@@ -33,6 +33,11 @@ public class EnemyChaseState : EnemyState
         {
             enemy.StateMachine.ChangeState(enemy.AttackState);
         }
+
+        if (!enemy.isAggroed)
+        {
+            enemy.StateMachine.ChangeState(enemy.IdleState);
+        }
     }
 
     public override void PhysicsUpdate()
