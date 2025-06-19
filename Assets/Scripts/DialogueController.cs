@@ -57,6 +57,7 @@ public class DialogueController : MonoBehaviour
         {
             gameObject.SetActive(true);
             GetComponent<Image>().DOFade(0.5f, 0.3f);
+            transform.parent.GetComponent<FollowPlayer>().enabled = false;
         }
 
         NPCNameText.text = dialogueText.speakerName;
@@ -74,6 +75,7 @@ public class DialogueController : MonoBehaviour
         if (gameObject.activeSelf)
         {
             GetComponent<Image>().DOFade(0f, 0.2f);
+            transform.parent.GetComponent<FollowPlayer>().enabled = true;
             gameObject.SetActive(false);
         }
     }

@@ -10,7 +10,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
     [SerializeField] private SpriteRenderer interactSprite;
     private Transform playerTransform;
 
-    private const float INTERACT_DISTANCE = 5f;
+    [SerializeField] private float interactDistance = 5f;
     
     private void Awake()
     {
@@ -45,7 +45,7 @@ public abstract class NPC : MonoBehaviour, IInteractable
 
     private bool IsWithingInteractDistance()
     {
-        if (Vector2.Distance(playerTransform.position, transform.position) < INTERACT_DISTANCE) return true;
+        if (Vector2.Distance(playerTransform.position, transform.position) < interactDistance) return true;
         else return false;
     }
 }
