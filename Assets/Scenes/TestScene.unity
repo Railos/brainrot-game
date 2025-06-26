@@ -827,7 +827,6 @@ GameObject:
   - component: {fileID: 818263234}
   - component: {fileID: 818263233}
   - component: {fileID: 818263236}
-  - component: {fileID: 818263232}
   - component: {fileID: 818263235}
   m_Layer: 0
   m_Name: Exploding Barrel
@@ -836,18 +835,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &818263232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818263231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a191347600bc84d4796af99d6d3ff2d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &818263233
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -933,7 +920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionRadius: 5
   explosionDamage: 30
-  explosionForce: 60
+  explosionForce: 30
   affectedLayers:
     serializedVersion: 2
     m_Bits: 193
@@ -1662,7 +1649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd666ecdcc8a314bbe12e96b0575472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 1, y: 3, z: 0}
+  offset: {x: 0.5, y: 5, z: 0}
 --- !u!1 &1197211053
 GameObject:
   m_ObjectHideFlags: 0
@@ -2787,9 +2774,10 @@ MonoBehaviour:
   <MaxHealth>k__BackingField: 100
   <CurrentHealth>k__BackingField: 0
   invincibilityTimeAfterTakingDamage: 0.5
-  curState: 0
   deathParticle: {fileID: 3982244383241333343, guid: f38ec2a4cf27842459242de048e578f4, type: 3}
   healthBar: {fileID: 5678608390059228596}
+  playerMovement: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!81 &2381681271912754721
 AudioListener:
   m_ObjectHideFlags: 0
@@ -3152,6 +3140,7 @@ MonoBehaviour:
   airDeceleration: 5
   airJumpForceMultiplier: 0.7
   jumpsRemaining: 1
+  rb: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
@@ -3201,7 +3190,7 @@ Transform:
   m_GameObject: {fileID: 5922109327062929180}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.009, z: 0}
+  m_LocalPosition: {x: 0, y: -1.087, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

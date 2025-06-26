@@ -10,13 +10,24 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerState curState;
     public ParticleSystem deathParticle;
     [SerializeField] private HealthBar healthBar;
+    public PlayerMovement playerMovement;
 
-    public enum PlayerState
+    public Animator animator;
+    
+    public PlayerStateMachine StateMachine { get; set; }
+    public PlayerIdleState IdleState { get; set; }
+    public PlayerWalkState WalkState { get; set; }
+    public PlayerJumpState JumpState { get; set; }
+    
+    private void Awake()
     {
-        Idle,
-        Walking,
-        Jumping,
-        Attacking
+        playerMovement = GetComponent<PlayerMovement>();
+        StateMachine = new PlayerStateMachine();
+        IdleState = new PlayerIdleState(this, StateMachine);
+        WalkState = new PlayerWalkState(this, StateMachine);
+        JumpState = new PlayerJumpState(this, StateMachine);
+        
+        animator = GetComponent<Animator>();
     }
     
     private void Start()
@@ -24,6 +35,17 @@ public class Player : MonoBehaviour, IDamageable
         CurrentHealth = MaxHealth;
         healthBar.SetMaxHealth(MaxHealth);
         healthBar.SetHealth(CurrentHealth);
+        StateMachine.Initialize(IdleState);
+    }
+
+    private void Update()
+    {
+        StateMachine.CurrentPlayerState.FrameUpdate();
+    }
+    
+    private void FixedUpdate()
+    {
+        StateMachine.CurrentPlayerState.PhysicsUpdate();
     }
     
     public void Damage(float damageAmount)
@@ -55,6 +77,17 @@ public class Player : MonoBehaviour, IDamageable
     private void ResetCanReceiveDamage()
     {
         canReceiveDamage = true;
+    }
+    
+    private void AnimationTriggerEvent(AnimationTriggerType triggerType)
+    {
+        StateMachine.CurrentPlayerState.AnimationEventTrigger(triggerType);
+    }
+    
+    public enum AnimationTriggerType
+    {
+        PlayerDamaged,
+        PlayFootstepSound
     }
     
 }

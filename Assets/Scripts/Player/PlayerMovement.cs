@@ -23,10 +23,9 @@ public class PlayerMovement : MonoBehaviour
     private Controls controls;
     private InputAction moveAction;
     private InputAction jumpAction;
-    
-    private Rigidbody2D rb;
-    private Animator animator;
-    
+
+    public Rigidbody2D rb;
+
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
     private bool isFacingRight = true;
@@ -41,28 +40,12 @@ public class PlayerMovement : MonoBehaviour
         jumpAction.Enable();
         moveAction.Enable();
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         player = GetComponent<Player>();
     }
     
     private void Update()
     {
         moveDirection = moveAction.ReadValue<Vector2>().x;
-        if (Mathf.Abs(moveDirection) > 0f && player.curState != Player.PlayerState.Walking)
-        {
-            player.curState = Player.PlayerState.Walking;
-            animator.CrossFade("PlayerRun", 0, 0, 0);
-        }
-        else if (Mathf.Abs(moveDirection) <= 0.1f && player.curState != Player.PlayerState.Idle)
-        {
-            player.curState = Player.PlayerState.Idle;
-            animator.CrossFade("PlayerIdle", 0, 0, 0);
-        }
-
-        if (player.curState == Player.PlayerState.Jumping)
-        {
-            animator.CrossFade("PlayerJump", 0, 0, 0);
-        }
 
         Jumping();
         FlipCharacter();
@@ -108,13 +91,12 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, currentJumpForce);
             jumpsRemaining--;
             currentJumpForce *= airJumpForceMultiplier; // Reduce force for next jump
-            player.curState = Player.PlayerState.Jumping;
         }
     }
     
     public bool IsGrounded()
     {
-        return Physics2D.OverlapBox(groundCheck.position, new Vector2(0.2f, 0.1f), 0, groundLayer);
+        return Physics2D.OverlapBox(groundCheck.position, new Vector2(0.2f, 0.2f), 0, groundLayer);
     }
 
     private void FlipCharacter()
