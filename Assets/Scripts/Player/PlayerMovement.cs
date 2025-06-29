@@ -19,10 +19,6 @@ public class PlayerMovement : MonoBehaviour
     private float moveDirection;
     public int jumpsRemaining = 2; // Track available jumps
     private float currentJumpForce;
-    
-    private Controls controls;
-    private InputAction moveAction;
-    private InputAction jumpAction;
 
     public Rigidbody2D rb;
 
@@ -34,19 +30,14 @@ public class PlayerMovement : MonoBehaviour
     
     private void Awake()
     {
-        controls = new Controls();
-        moveAction = controls.Player.Move;
-        jumpAction = controls.Player.Jump;
-        jumpAction.Enable();
-        moveAction.Enable();
         rb = GetComponent<Rigidbody2D>();
         player = GetComponent<Player>();
     }
-    
+
     private void Update()
     {
-        moveDirection = moveAction.ReadValue<Vector2>().x;
-
+        moveDirection = player.moveAction.ReadValue<Vector2>().x;
+        
         Jumping();
         FlipCharacter();
     }
@@ -86,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
             currentJumpForce = jumpForce; // Reset jump force when grounded
         }
 
-        if (jumpAction.triggered && jumpsRemaining > 0)
+        if (player.jumpAction.triggered && jumpsRemaining > 0)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, currentJumpForce);
             jumpsRemaining--;

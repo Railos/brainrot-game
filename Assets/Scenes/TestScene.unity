@@ -2776,7 +2776,35 @@ MonoBehaviour:
   invincibilityTimeAfterTakingDamage: 0.5
   deathParticle: {fileID: 3982244383241333343, guid: f38ec2a4cf27842459242de048e578f4, type: 3}
   healthBar: {fileID: 5678608390059228596}
-  playerMovement: {fileID: 0}
+  playerMovement: {fileID: 4267074172548459227}
+  playerBite: {fileID: 7880911727527698232}
+  moveAction:
+    m_Name: Move
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 29ce27e5-60ef-4c7d-8794-4f6c68dc15b4
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1776f227-4ffb-44ff-a41f-8a9d56f960ad
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  biteAction:
+    m_Name: Bite
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 93f0ff8b-befd-4f79-9652-aa4e842e2811
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   animator: {fileID: 0}
 --- !u!81 &2381681271912754721
 AudioListener:
@@ -3107,7 +3135,7 @@ BoxCollider2D:
   m_UsedByEffector: 1
   m_CompositeOperation: 1
   m_CompositeOrder: 0
-  m_Offset: {x: 0.18675828, y: -0.07535267}
+  m_Offset: {x: 0.18675828, y: -0.04}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -3721,6 +3749,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 129
   cam: {fileID: 3578050664071422470}
+  resettedAttack: 1
+  canAttack: 1
 --- !u!224 &7901325668696733182
 RectTransform:
   m_ObjectHideFlags: 0

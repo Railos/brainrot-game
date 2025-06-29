@@ -33,6 +33,11 @@ public class PlayerIdleState : PlayerState
         {
             player.StateMachine.ChangeState(player.JumpState);
         }
+
+        if (player.biteAction.triggered && player.playerBite.resettedAttack && player.playerBite.canAttack)
+        {
+            player.StateMachine.ChangeState(player.BiteState);
+        }
     }
 
     public override void PhysicsUpdate()

@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerBite : MonoBehaviour
 {
     [Header("Attack Settings")]
     [SerializeField] private float attackRange = 2f;
@@ -14,29 +14,26 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private LayerMask attackableLayers;
 
     [SerializeField] private Camera cam;
-    private Controls controls;
-    private InputAction attackAction;
-    private bool resettedAttack = true;
-    private bool canAttack = true;
+    public bool resettedAttack = true;
+    public bool canAttack = true;
     private PlayerMovement movement;
+    private Player player;
 
     private void Awake()
     {
-        controls = new Controls();
-        attackAction = controls.Player.Attack;
-        attackAction.Enable();
         movement = GetComponent<PlayerMovement>();
+        player = GetComponent<Player>();
     }
-    
+
     private void Update()
     {
-        if (attackAction.triggered && resettedAttack && canAttack)
+        if (player.biteAction.triggered && resettedAttack && canAttack)
         {
             PerformAttack();
         }
     }
-
-    private void PerformAttack()
+    
+    public void PerformAttack()
     {
         resettedAttack = false;
         canAttack = false;

@@ -1,18 +1,19 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerWalkState : PlayerState
+public class PlayerBiteState : PlayerState
 {
-    public PlayerWalkState(Player player, PlayerStateMachine playerStateMachine) : base(player, playerStateMachine)
+
+    public PlayerBiteState(Player player, PlayerStateMachine playerStateMachine) : base(player, playerStateMachine)
     {
-        
     }
 
     public override void EnterState()
     {
         base.EnterState();
         
-        player.animator.CrossFade("PlayerRun", 0, 0, 0);
+        player.animator.CrossFade("PlayerBite", 0, 0, 0);
     }
 
     public override void ExitState()
@@ -24,19 +25,16 @@ public class PlayerWalkState : PlayerState
     {
         base.FrameUpdate();
 
+        if (!player.playerBite.canAttack || !player.playerBite.resettedAttack) return;
+        
         if (player.playerMovement.rb.linearVelocityX == 0f)
         {
             player.StateMachine.ChangeState(player.IdleState);
         }
-
-        if (player.playerMovement.rb.linearVelocityY != 0f)
-        {
-            player.StateMachine.ChangeState(player.JumpState);
-        }
         
-        if (player.biteAction.triggered && player.playerBite.resettedAttack && player.playerBite.canAttack)
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) > 0f)
         {
-            player.StateMachine.ChangeState(player.BiteState);
+            player.StateMachine.ChangeState(player.WalkState);
         }
     }
 

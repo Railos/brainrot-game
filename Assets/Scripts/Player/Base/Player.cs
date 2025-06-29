@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour, IDamageable
@@ -11,6 +12,11 @@ public class Player : MonoBehaviour, IDamageable
     public ParticleSystem deathParticle;
     [SerializeField] private HealthBar healthBar;
     public PlayerMovement playerMovement;
+    public PlayerBite playerBite;
+    private Controls controls;
+    public InputAction moveAction;
+    public InputAction jumpAction;
+    public InputAction biteAction;
 
     public Animator animator;
     
@@ -18,14 +24,25 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerIdleState IdleState { get; set; }
     public PlayerWalkState WalkState { get; set; }
     public PlayerJumpState JumpState { get; set; }
+    public PlayerBiteState BiteState { get; set; }
     
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        playerBite = GetComponent<PlayerBite>();
         StateMachine = new PlayerStateMachine();
         IdleState = new PlayerIdleState(this, StateMachine);
         WalkState = new PlayerWalkState(this, StateMachine);
         JumpState = new PlayerJumpState(this, StateMachine);
+        BiteState = new PlayerBiteState(this, StateMachine);
+
+        controls = new Controls();
+        moveAction = controls.Player.Move;
+        moveAction.Enable();
+        jumpAction = controls.Player.Jump;
+        jumpAction.Enable();
+        biteAction = controls.Player.Attack;
+        biteAction.Enable();
         
         animator = GetComponent<Animator>();
     }
