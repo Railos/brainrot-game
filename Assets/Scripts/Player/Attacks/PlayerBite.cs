@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 
-public class PlayerBite : MonoBehaviour, IPlayerAttack
+public class PlayerBite : PlayerAttack
 {
     [Header("Attack Settings")]
     [SerializeField] private float attackRange = 2f;
@@ -26,7 +26,7 @@ public class PlayerBite : MonoBehaviour, IPlayerAttack
         player = GetComponent<Player>();
     }
     
-    public void PerformAttack()
+    public override void PerformAttack()
     {
         resettedAttack = false;
         canAttack = false;
