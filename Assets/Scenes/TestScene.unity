@@ -2780,6 +2780,7 @@ MonoBehaviour:
   healthBar: {fileID: 5678608390059228596}
   playerMovement: {fileID: 4267074172548459227}
   playerBite: {fileID: 7880911727527698232}
+  playerTailAttack: {fileID: 7880911727527698233}
   moveAction:
     m_Name: Move
     m_Type: 0

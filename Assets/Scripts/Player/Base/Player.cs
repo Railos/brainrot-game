@@ -13,6 +13,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private HealthBar healthBar;
     public PlayerMovement playerMovement;
     public PlayerBite playerBite;
+    public PlayerTailAttack playerTailAttack;
     private Controls controls;
     public InputAction moveAction;
     public InputAction jumpAction;

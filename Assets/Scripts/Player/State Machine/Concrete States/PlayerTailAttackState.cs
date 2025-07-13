@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 public class PlayerTailAttackState : PlayerState
 {
@@ -11,8 +12,12 @@ public class PlayerTailAttackState : PlayerState
     public override void EnterState()
     {
         base.EnterState();
-        
-        player.animator.CrossFade("PlayerRun", 0, 0, 0);
+        Debug.Log("Entering Tail Attack State");
+        player.animator.CrossFade("PlayerTailAttack", 0, 0, 0);
+
+        player.playerMovement.enabled = true;
+        player.playerTailAttack.enabled = true;
+        player.playerBite.enabled = true;
     }
 
     public override void ExitState()
@@ -24,20 +29,29 @@ public class PlayerTailAttackState : PlayerState
     {
         base.FrameUpdate();
 
-        if (player.playerMovement.rb.linearVelocityX == 0f)
+        if (!player.playerTailAttack.resettedAttack || !player.playerTailAttack.canAttack) return;
+
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) > 0.1f)
+        {
+            player.StateMachine.ChangeState(player.WalkState);
+        }
+
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) < 0.1f)
         {
             player.StateMachine.ChangeState(player.IdleState);
         }
 
-        if (player.playerMovement.rb.linearVelocityY != 0f)
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityY) > 0.1f)
         {
             player.StateMachine.ChangeState(player.JumpState);
         }
         
-        if (player.attackAction.triggered && player.playerBite.resettedAttack && player.playerBite.canAttack)
-        {
-            player.StateMachine.ChangeState(player.BiteState);
-        }
+        player.attackAction.performed += ctx => {
+            if (ctx.interaction is PressInteraction && player.playerBite.resettedAttack && player.playerBite.canAttack)
+            {
+                player.StateMachine.ChangeState(player.BiteState);
+            }
+        };
     }
 
     public override void PhysicsUpdate()

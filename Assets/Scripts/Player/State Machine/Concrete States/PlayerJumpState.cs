@@ -11,8 +11,12 @@ public class PlayerJumpState : PlayerState
     public override void EnterState()
     {
         base.EnterState();
-        
+        Debug.Log("Entering Jump State");
         player.animator.CrossFade("PlayerJump", 0, 0, 0);
+
+        player.playerMovement.enabled = true;
+        player.playerTailAttack.enabled = true;
+        player.playerBite.enabled = true;
     }
 
     public override void ExitState()
@@ -24,14 +28,14 @@ public class PlayerJumpState : PlayerState
     {
         base.FrameUpdate();
 
-        if (player.playerMovement.rb.linearVelocityY != 0f) return;
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityY) > 0.1f) return;
         
-        if (player.playerMovement.rb.linearVelocityX == 0f)
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) < 0.1f)
         {
             player.StateMachine.ChangeState(player.IdleState);
         }
 
-        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) > 0f)
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) > 0.1f)
         {
             player.StateMachine.ChangeState(player.WalkState);
         }

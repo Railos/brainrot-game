@@ -11,8 +11,12 @@ public class PlayerIdleState : PlayerState
     public override void EnterState()
     {
         base.EnterState();
-        
+        Debug.Log("Entering Idle State");
         player.animator.CrossFade("PlayerIdle", 0, 0, 0);
+
+        player.playerMovement.enabled = true;
+        player.playerTailAttack.enabled = true;
+        player.playerBite.enabled = true;
     }
 
     public override void ExitState()
@@ -24,12 +28,12 @@ public class PlayerIdleState : PlayerState
     {
         base.FrameUpdate();
 
-        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) > 0f)
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) > 0.1f)
         {
             player.StateMachine.ChangeState(player.WalkState);
         }
         
-        if (player.playerMovement.rb.linearVelocityY != 0f)
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityY) > 0.1f)
         {
             player.StateMachine.ChangeState(player.JumpState);
         }

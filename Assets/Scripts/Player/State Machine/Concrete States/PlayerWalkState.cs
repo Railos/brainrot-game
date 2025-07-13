@@ -11,8 +11,13 @@ public class PlayerWalkState : PlayerState
     public override void EnterState()
     {
         base.EnterState();
+        Debug.Log("Entering Walk State");
         
         player.animator.CrossFade("PlayerRun", 0, 0, 0);
+
+        player.playerMovement.enabled = true;
+        player.playerTailAttack.enabled = true;
+        player.playerBite.enabled = true;
     }
 
     public override void ExitState()
@@ -24,12 +29,12 @@ public class PlayerWalkState : PlayerState
     {
         base.FrameUpdate();
 
-        if (player.playerMovement.rb.linearVelocityX == 0f)
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) < 0.1f)
         {
             player.StateMachine.ChangeState(player.IdleState);
         }
 
-        if (player.playerMovement.rb.linearVelocityY != 0f)
+        if (Mathf.Abs(player.playerMovement.rb.linearVelocityY) > 0.1f)
         {
             player.StateMachine.ChangeState(player.JumpState);
         }
