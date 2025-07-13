@@ -16,7 +16,7 @@ public class Player : MonoBehaviour, IDamageable
     private Controls controls;
     public InputAction moveAction;
     public InputAction jumpAction;
-    public InputAction biteAction;
+    public InputAction attackAction;
 
     public Animator animator;
     
@@ -25,6 +25,7 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerWalkState WalkState { get; set; }
     public PlayerJumpState JumpState { get; set; }
     public PlayerBiteState BiteState { get; set; }
+    public PlayerTailAttackState TailAttackState { get; set; }
     
     private void Awake()
     {
@@ -35,15 +36,15 @@ public class Player : MonoBehaviour, IDamageable
         WalkState = new PlayerWalkState(this, StateMachine);
         JumpState = new PlayerJumpState(this, StateMachine);
         BiteState = new PlayerBiteState(this, StateMachine);
+        TailAttackState = new PlayerTailAttackState(this, StateMachine);
 
         controls = new Controls();
         moveAction = controls.Player.Move;
         moveAction.Enable();
         jumpAction = controls.Player.Jump;
         jumpAction.Enable();
-        biteAction = controls.Player.Attack;
-        biteAction.Enable();
-        
+        attackAction = controls.Player.Attack;
+        attackAction.Enable();
         animator = GetComponent<Animator>();
     }
     

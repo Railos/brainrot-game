@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
-    private bool isFacingRight = true;
+    public bool isFacingRight = true;
     public bool isControllingSpeed = true;
     private Player player;
     

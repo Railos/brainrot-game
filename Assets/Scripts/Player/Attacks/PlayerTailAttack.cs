@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 
-public class PlayerBite : MonoBehaviour, IPlayerAttack
+public class PlayerTailAttack : MonoBehaviour, IPlayerAttack
 {
     [Header("Attack Settings")]
     [SerializeField] private float attackRange = 2f;
@@ -28,28 +28,27 @@ public class PlayerBite : MonoBehaviour, IPlayerAttack
     
     public void PerformAttack()
     {
+        Debug.Log("Tail Attack");
+
         resettedAttack = false;
         canAttack = false;
-
+        
         movement.enabled = false;
-
-        // Determine direction based on player's facing
-        Vector2 attackDirection = movement.isFacingRight ? Vector2.right : Vector2.left;
-
-        // Set dash velocity in attack direction
+        
+        Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 attackDirection = (mousePosition - (Vector2)transform.position).normalized;
+        float attackAngle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
         GetComponent<Rigidbody2D>().linearVelocity = attackDirection * attackDash;
-
-        // Perform box cast
+        
         RaycastHit2D[] hits = Physics2D.BoxCastAll(
             transform.position,
             boxSize,
-            0,
+            attackAngle,
             attackDirection,
             attackRange,
             attackableLayers
         );
 
-        // Apply damage
         foreach (RaycastHit2D hit in hits)
         {
             IDamageable health = hit.collider.GetComponent<IDamageable>();
@@ -58,5 +57,6 @@ public class PlayerBite : MonoBehaviour, IPlayerAttack
                 health.Damage(damageAmount);
             }
         }
+        
     }
 }

@@ -36,7 +36,7 @@ public class PlayerJumpState : PlayerState
             player.StateMachine.ChangeState(player.WalkState);
         }
         
-        if (player.biteAction.triggered && player.playerBite.resettedAttack && player.playerBite.canAttack)
+        if (player.attackAction.triggered && player.playerBite.resettedAttack && player.playerBite.canAttack)
         {
             player.StateMachine.ChangeState(player.BiteState);
         }

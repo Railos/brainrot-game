@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-public class PlayerIdleState : PlayerState
+public class PlayerTailAttackState : PlayerState
 {
-    public PlayerIdleState(Player player, PlayerStateMachine playerStateMachine) : base(player, playerStateMachine)
+    public PlayerTailAttackState(Player player, PlayerStateMachine playerStateMachine) : base(player, playerStateMachine)
     {
         
     }
@@ -12,7 +12,7 @@ public class PlayerIdleState : PlayerState
     {
         base.EnterState();
         
-        player.animator.CrossFade("PlayerIdle", 0, 0, 0);
+        player.animator.CrossFade("PlayerRun", 0, 0, 0);
     }
 
     public override void ExitState()
@@ -24,16 +24,16 @@ public class PlayerIdleState : PlayerState
     {
         base.FrameUpdate();
 
-        if (Mathf.Abs(player.playerMovement.rb.linearVelocityX) > 0f)
+        if (player.playerMovement.rb.linearVelocityX == 0f)
         {
-            player.StateMachine.ChangeState(player.WalkState);
+            player.StateMachine.ChangeState(player.IdleState);
         }
-        
+
         if (player.playerMovement.rb.linearVelocityY != 0f)
         {
             player.StateMachine.ChangeState(player.JumpState);
         }
-
+        
         if (player.attackAction.triggered && player.playerBite.resettedAttack && player.playerBite.canAttack)
         {
             player.StateMachine.ChangeState(player.BiteState);
